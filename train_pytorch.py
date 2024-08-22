@@ -32,13 +32,13 @@ def main(dataset_list):
         min_sample_count = min([n_samples['train'], n_samples['val']])
 
         # Parameters
-        NBR_EPOCH = 100
+        NBR_EPOCH = 200
         BATCH_SIZE = 16
         while BATCH_SIZE > min_sample_count:
             BATCH_SIZE = BATCH_SIZE // 2
         print("BATCH SIZE:", BATCH_SIZE)
 
-        for ENCODER_NAME in ['mit_b0']:
+        for ENCODER_NAME in ['resnet18', 'resnet50', 'efficientnet-b0','mobilenet_v2', 'densenet121', 'mit_b0']:
             
             if ENCODER_NAME == 'mit_b0' and n_channels != 3:
                 continue
@@ -71,7 +71,7 @@ def main(dataset_list):
                 train_loader = data.DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
                 val_loader = data.DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
                 
-                device = torch.device('cuda:1')
+                device = torch.device('cuda')
 
                 model = smp.Unet(
                     encoder_name=ENCODER_NAME,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7

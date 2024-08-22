@@ -56,7 +56,7 @@ def main(dataset_list):
                 # encapsulate data into dataloader form
                 test_loader = data.DataLoader(dataset=test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-                device = torch.device('cuda:0')
+                device = torch.device('cuda')
 
                 model = smp.Unet(
                     encoder_name=ENCODER_NAME,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
@@ -102,12 +102,6 @@ def main(dataset_list):
 
 ## Main
 if __name__ == '__main__':
-    """
-    dataset_list = [ "tnbcnuclei", "deepbacs", "brifiseg",
-                    "busi", "covid19radio", "covidquex", "cystoidfluid", "isic2016",
-                    "polypgen", "promise12", "robotool", "uwaterlooskincancer",
-                    "ultrasoundnerve", "usforkidney", "yeaz", "mosmedplus"]
-    """
     dataset_list = ["monusac", "wbc",
                     "bkai-igh", "m2caiseg", "abdomenus", "fhpsaop"]
     main(dataset_list)

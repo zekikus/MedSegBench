@@ -72,7 +72,7 @@ def main(dataset_list):
                 train_loader = data.DataLoader(dataset=train_dataset, batch_size=BATCH_SIZE, shuffle=True)
                 val_loader = data.DataLoader(dataset=val_dataset, batch_size=BATCH_SIZE, shuffle=True)
                 
-                device = torch.device('cuda:1')
+                device = torch.device('cuda')
 
                 model = smp.Unet(
                     encoder_name=ENCODER_NAME,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7

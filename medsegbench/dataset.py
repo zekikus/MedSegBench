@@ -20,7 +20,6 @@ class MedSegBench(Dataset):
                  transform = None,
                  target_transform = None,
                  download = False,
-                 as_rgb = False,
                  root = DEFAULT_ROOT,
                  size=512,
                  category = None,
@@ -34,8 +33,8 @@ class MedSegBench(Dataset):
             transform (callable, optional): A function/transform that takes in an PIL image and returns a transformed version. Default: None.
             target_transform (callable, optional): A function/transform that takes in the target and transforms it. Default: None.
             download (bool, optional): If true, downloads the dataset from the internet and puts it in root directory. If dataset is already downloaded, it is not downloaded again. Default: False.
-            as_rgb (bool, optional): If true, convert grayscale images to 3-channel images. Default: False.
-            size (int, optional): The size of the returned images. If None, use MNIST-like 28. Default: None.
+            size (int, optional): The size of the returned images. Default: 512.
+            category (str, optional): Sub-categories of some datasets. Default: None
             mmap_mode (str, optional): If not None, read image arrays from the disk directly. This is useful to set `mmap_mode='r'` to save memory usage when the dataset is large (e.g., PathMNIST-224). Default: None.
             root (string, optional): Root directory of dataset. Default: `~/.medsegbench`.
         """
@@ -71,7 +70,6 @@ class MedSegBench(Dataset):
         self.split = split
         self.transform = transform
         self.target_transform = target_transform
-        self.as_rgb = as_rgb
 
         if self.split in ["train", "val", "test"]:
             if self.flag == 'idrib':
@@ -96,9 +94,6 @@ class MedSegBench(Dataset):
         img, target = self.imgs[index], self.labels[index]
         if self.info['task'] == 'binary': target = target * 255
         img = Image.fromarray(img)
-
-        if self.as_rgb:
-            img = img.convert("RGB")
 
         if self.transform is not None:
             img = self.transform(img)

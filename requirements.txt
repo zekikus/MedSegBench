@@ -1,0 +1,7 @@
+numpy
+scikit-learn
+scikit-image
+Pillow
+torch
+torchvision
+segmentation-models-pytorch
