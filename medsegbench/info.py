@@ -2,6 +2,12 @@ import os
 from os.path import expanduser
 import warnings
 
+#====================================================================
+# This part of the code is based on MedMNIST
+# from https://github.com/MedMNIST/MedMNIST
+# Yang, J., Shi, R., Wei, D., Liu, Z., Zhao, L., Ke, B., ... & Ni, B. (2023). Medmnist v2-a large-scale lightweight benchmark for 2d and 3d biomedical image classification. Scientific Data, 10(1), 41.
+# ===================================================================
+
 def get_default_root():
     home = expanduser("~")
     dir_path = os.path.join(home, ".medsegbench")
