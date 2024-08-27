@@ -20,7 +20,8 @@ def seed_torch(seed=42):
 
 def main(dataset_list):
 
-    path = "results"
+    path = "results"  # Should be in main directory
+
     for data_flag in dataset_list:
         
         # Dataset info
@@ -50,7 +51,7 @@ def main(dataset_list):
             for seed in [0, 42, 3074]:
                 
                 seed_torch(seed)
-                print("DATASET:", data_flag, "ENCODER:", ENCODER_NAME, "SEED:", seed)
+                print("DATASET:", data_flag, "ENCODER:", ENCODER_NAME, "SEED:", seed, "#Class:", n_classes)
                 
                 log = ""
                 download = False
@@ -77,13 +78,14 @@ def main(dataset_list):
                     encoder_name=ENCODER_NAME,        # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
                     encoder_weights=None,     # use `imagenet` pre-trained weights for encoder initialization
                     in_channels=n_channels,                  # model input channels (1 for gray-scale images, 3 for RGB, etc.)
-                    classes=1,                      # model output channels (number of classes in your dataset)
+                    classes=n_classes,
+                    activation='softmax'                    # model output channels (number of classes in your dataset)
                 )
 
                 model.to(device)
                 optimizer = optim.Adam(model.parameters(), lr=1e-3) # 1e-3
                 # for image segmentation dice loss could be the best first choice
-                loss_fn = smp.losses.DiceLoss(smp.losses.BINARY_MODE, from_logits=True)
+                loss_fn = torch.nn.CrossEntropyLoss()
 
                 for epoch in range(NBR_EPOCH):
 
@@ -95,29 +97,16 @@ def main(dataset_list):
                         
                         with torch.set_grad_enabled(True):
                             logits_mask = model(inputs)
-                            loss = loss_fn(logits_mask, labels)
+                            # Get value with highest probability
+                            loss = loss_fn(logits_mask, labels.squeeze(1).long())
                             train_loss.append(loss.item())
                             
-                            # Lets compute metrics for some threshold
-                            # first convert mask values to probabilities, then 
-                            # apply thresholding
-                            prob_mask = logits_mask.sigmoid()
-                            pred_mask = (prob_mask > 0.5).float()
-
-                            # We will compute IoU metric by two ways
-                            #   1. dataset-wise
-                            #   2. image-wise
-                            # but for now we just compute true positive, false positive, false negative and
-                            # true negative 'pixels' for each image and class
-                            # these values will be aggregated in the end of an epoch
-                            tp, fp, fn, tn = smp.metrics.get_stats(pred_mask.long(), labels.long(), mode="binary")
-
-                            # dataset IoU means that we aggregate intersection and union over whole dataset
+                            tp, fp, fn, tn = smp.metrics.get_stats(torch.argmax(logits_mask, dim=1, keepdim=True), labels.long(), mode='multiclass', num_classes=n_classes)                            # dataset IoU means that we aggregate intersection and union over whole dataset
                             # and then compute IoU score. The difference between dataset_iou and per_image_iou scores
                             # in this particular case will not be much, however for dataset 
                             # with "empty" images (images without target class) a large gap could be observed. 
                             # Empty images influence a lot on per_image_iou and much less on dataset_iou.
-                            dataset_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro")
+                            dataset_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="macro-imagewise")
                             
                             train_iou.append(dataset_iou)
 
@@ -138,29 +127,16 @@ def main(dataset_list):
                         inputs, labels = inputs.to(device), labels.to(device)
                         with torch.set_grad_enabled(False):
                             logits_mask = model(inputs)
-                            loss = loss_fn(logits_mask, labels)
+                            # Get value with highest probability
+                            loss = loss_fn(logits_mask, labels.squeeze(1).long())
                             val_loss.append(loss.item())
                             
-                            # Lets compute metrics for some threshold
-                            # first convert mask values to probabilities, then 
-                            # apply thresholding
-                            prob_mask = logits_mask.sigmoid()
-                            pred_mask = (prob_mask > 0.5).float()
-
-                            # We will compute IoU metric by two ways
-                            #   1. dataset-wise
-                            #   2. image-wise
-                            # but for now we just compute true positive, false positive, false negative and
-                            # true negative 'pixels' for each image and class
-                            # these values will be aggregated in the end of an epoch
-                            tp, fp, fn, tn = smp.metrics.get_stats(pred_mask.long(), labels.long(), mode="binary")
-
-                            # dataset IoU means that we aggregate intersection and union over whole dataset
+                            tp, fp, fn, tn = smp.metrics.get_stats(torch.argmax(logits_mask, dim=1, keepdim=True), labels.long(), mode='multiclass', num_classes=n_classes)                            # dataset IoU means that we aggregate intersection and union over whole dataset
                             # and then compute IoU score. The difference between dataset_iou and per_image_iou scores
                             # in this particular case will not be much, however for dataset 
                             # with "empty" images (images without target class) a large gap could be observed. 
                             # Empty images influence a lot on per_image_iou and much less on dataset_iou.
-                            dataset_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="micro")
+                            dataset_iou = smp.metrics.iou_score(tp, fp, fn, tn, reduction="macro-imagewise")
                             val_iou.append(dataset_iou)
 
                         del logits_mask
@@ -182,11 +158,9 @@ def main(dataset_list):
                     f.write(log)
 
                 torch.cuda.empty_cache()
+                del model
 
 ## Main
 if __name__ == '__main__':
-    #dataset_list = ["covid19radio", "covidquex", "cystoidfluid", ]
-    # dataset_list = ["cystoidfluid"]
-    # dataset_list = ["pandental","nuclei"]
-    dataset_list = ["nuclei"]
+    dataset_list = ["bkai-igh"]
     main(dataset_list)
