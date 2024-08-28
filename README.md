@@ -43,5 +43,22 @@ You can download sub-categories of dataset by setting `class={C1, C2, C3, ...}`:
     >>> from medsegbench import WbcMSBench
     >>> train_dataset = WbcMSBench(split="train", category='C1')
 
-# Experiments
+## For Pytorch users
+* Code completely designed using Pytorch
+* Explore train and test scripts for MedSegBench
+    * For Training:
+        * Binary Tasks: [`train_pytorch.py`](examples/train_pytorch.py)
+        * Multi-class Tasks: [`train_pytorch_multi_class.py`](examples/train_pytorch_multi_class.py)
+    * For Testing:
+        * Binary Tasks: [`test_pytorch.py`](examples/test_pytorch.py)
+        * Multi-class Tasks: [`test_pytorch_multi_class.py`](examples/test_pytorch_multi_class.py)
+          
+# Reproducibility
+You can download trained model weights and detailed prediction results for each dataset from [Zenodo]()
 
+`dataset_name.zip:` It contains trained model weights for each encoder/decoder network with 3 different seed.
+
+`csv_files_predictions.zip:`
+
+* It includes detailed image-based prediction results for each dataset and model.
+* Each file named as {datasetname}\_test\_{modelname}\_seed\_{seedno}.csv
