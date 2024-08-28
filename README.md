@@ -45,7 +45,7 @@ You can download sub-categories of dataset by setting `class={C1, C2, C3, ...}`:
 
 ## For Pytorch users
 * Code completely designed using Pytorch
-* Explore train and test scripts for MedSegBench
+* Explore train and test scripts for MedSegBench. Using the following code files, you can reproduce reported results with shared weight in [Zenodo](https://zenodo.org/records/13381081)
     * For Training:
         * Binary Tasks: [`train_pytorch.py`](examples/train_pytorch.py)
         * Multi-class Tasks: [`train_pytorch_multi_class.py`](examples/train_pytorch_multi_class.py)
@@ -54,7 +54,7 @@ You can download sub-categories of dataset by setting `class={C1, C2, C3, ...}`:
         * Multi-class Tasks: [`test_pytorch_multi_class.py`](examples/test_pytorch_multi_class.py)
           
 # Reproducibility
-You can download trained model weights and detailed prediction results for each dataset from [Zenodo]()
+You can download trained model weights and detailed prediction results for each dataset from [Zenodo](https://zenodo.org/records/13381081)
 
 `dataset_name.zip:` It contains trained model weights for each encoder/decoder network with 3 different seed.
 
