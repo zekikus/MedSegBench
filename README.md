@@ -31,7 +31,7 @@ You can use default 512 sized version using the downloaded files:
 You can download the dataset by setting `download=True`:
 
     >>> from medsegbench import Promise12MSBench
-    >>> train_dataset = Promise12MSBench(split="train", downlaod=True)
+    >>> train_dataset = Promise12MSBench(split="train", download=True)
 
 You can download different sized versions by setting `size={128, 256, 512}`:
 
