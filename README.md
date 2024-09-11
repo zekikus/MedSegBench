@@ -38,7 +38,7 @@ You can download different sized versions by setting `size={128, 256, 512}`:
     >>> from medsegbench import Promise12MSBench
     >>> train_dataset = Promise12MSBench(split="train", size=256)
 
-You can download sub-categories of dataset by setting `class={C1, C2, C3, ...}`:
+You can download sub-categories of dataset by setting `category={C1, C2, C3, ...}`:
 
     >>> from medsegbench import WbcMSBench
     >>> train_dataset = WbcMSBench(split="train", category='C1')
