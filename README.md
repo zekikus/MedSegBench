@@ -63,4 +63,4 @@ You can download trained model weights and detailed prediction results for each 
 * It includes detailed image-based prediction results for each dataset and model.
 * Each file named as {datasetname}\_test\_{modelname}\_seed\_{seedno}.csv
 
-All performance measure scores for each dataset by seed: [`additional_files:`](additional_files/all_results.xlsx)
+All performance measure scores for each dataset by seed: [`additional_files:`](additional_files/all_result.xlsx)
