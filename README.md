@@ -64,3 +64,20 @@ You can download trained model weights and detailed prediction results for each 
 * Each file named as {datasetname}\_test\_{modelname}\_seed\_{seedno}.csv
 
 All performance measure scores for each dataset by seed: [`additional_files:`](additional_files/all_result.xlsx)
+
+# Citation
+
+    @article{Ku2024,
+      title = {MedSegBench: A comprehensive benchmark for medical image segmentation in diverse data modalities},
+      volume = {11},
+      ISSN = {2052-4463},
+      url = {http://dx.doi.org/10.1038/s41597-024-04159-2},
+      DOI = {10.1038/s41597-024-04159-2},
+      number = {1},
+      journal = {Scientific Data},
+      publisher = {Springer Science and Business Media LLC},
+      author = {Kuş,  Zeki and Aydin,  Musa},
+      year = {2024},
+      month = nov 
+    }
+
